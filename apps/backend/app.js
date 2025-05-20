@@ -6,7 +6,12 @@ const port = 3000;
 app.get(
   "/",
   cors({
-    origin: "http://127.0.0.1:5500",
+    origin: [
+      "http://127.0.0.1",
+      "http://localhost",
+      "http://91.218.143.75",
+      "http://www.dev-era-vr.ru",
+    ],
   }),
   (req, res) => {
     res.send({ message: "Hello World!!!" });
