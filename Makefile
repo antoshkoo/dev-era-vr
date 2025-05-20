@@ -3,7 +3,7 @@ WEBROOT=./nginx/certbot/www
 CERTS=./nginx/certbot/conf
 
 cert:
-docker compose run --rm certbot /acme.sh/acme.sh \
+	docker compose run --rm certbot /acme.sh/acme.sh \
 		--issue \
 		--webroot /var/www/certbot \
 		-d $(DOMAIN) \
