@@ -11,6 +11,7 @@ app.get(
       "http://localhost",
       "http://91.218.143.75",
       "http://www.dev-era-vr.ru",
+      "http://dev-era-vr.ru",
     ],
   }),
   (req, res) => {
