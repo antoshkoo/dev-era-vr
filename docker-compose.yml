@@ -1,0 +1,88 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    image: backend:latest
+    restart: unless-stopped
+    env_file:
+      - apps/backend/.env
+    # environment:
+    #   DATABASE_CLIENT: ${DATABASE_CLIENT}
+    #   DATABASE_HOST: postgres
+    #   DATABASE_NAME: ${DATABASE_NAME}
+    #   DATABASE_USERNAME: ${DATABASE_USERNAME}
+    #   DATABASE_PORT: ${DATABASE_PORT}
+    #   DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+    #   JWT_SECRET: ${JWT_SECRET}
+    #   ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+    #   NODE_ENV: ${NODE_ENV}
+    volumes:
+      - ./apps/backend/config:/opt/app/config
+      - ./apps/backend/src:/opt/app/src
+      - ./apps/backend/public/uploads:/opt/app/public/uploads
+      - ./apps/backend/.env:/opt/app/.env
+    ports:
+      - "1337:1337"
+    networks:
+      web:
+        aliases:
+          - backend
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: backend_postgres
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+      POSTGRES_DB: strapi
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "strapi"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    networks:
+      - web
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    networks:
+      - web
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      # - '443:443'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      # - ./nginx/certbot/www:/var/www/certbot
+      # - ./nginx/certbot/conf:/etc/letsencrypt
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - web
+
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #     - ./nginx/certbot/www:/var/www/certbot
+  #     - ./nginx/certbot/conf:/etc/letsencrypt
+
+volumes:
+  pg_data:
+
+networks:
+  web:
+    driver: bridge
