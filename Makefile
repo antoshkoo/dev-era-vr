@@ -3,7 +3,7 @@ WEBROOT=./nginx/certbot/www
 CERTS=./nginx/certbot/conf
 
 cert:
-	docker compose run --rm certbot /acme.sh/acme.sh \
+	docker compose run --rm certbot \
 		--issue \
 		--webroot /var/www/certbot \
 		-d $(DOMAIN) \
@@ -11,7 +11,7 @@ cert:
 		--fullchain-file /acme.sh/fullchain.pem
 
 renew:
-	docker compose run --rm certbot /acme.sh/acme.sh \
+	docker compose run --rm certbot \
 		--renew \
 		--webroot /var/www/certbot \
 		-d $(DOMAIN) \
