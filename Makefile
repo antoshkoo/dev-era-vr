@@ -3,7 +3,7 @@ WEBROOT=./nginx/certbot/www
 CERTS=./nginx/certbot/conf
 
 cert:
-	docker-compose run --rm certbot \
+	docker compose run --rm certbot \
 		--issue \
 		--webroot /var/www/certbot \
 		-d $(DOMAIN) \
@@ -11,7 +11,7 @@ cert:
 		--fullchain-file /acme.sh/fullchain.pem
 
 renew:
-	docker-compose run --rm certbot \
+	docker compose run --rm certbot \
 		--renew \
 		--webroot /var/www/certbot \
 		-d $(DOMAIN) \
@@ -19,14 +19,14 @@ renew:
 		--fullchain-file /acme.sh/fullchain.pem
 
 reload-nginx:
-	docker-compose exec nginx nginx -s reload
+	docker compose exec nginx nginx -s reload
 
 auto-renew: renew reload-nginx
 
 deploy: build up
 
 build:
-	docker-compose build
+	docker compose build
 
 up:
-	docker-compose up -d nginx
+	docker compose up -d nginx
