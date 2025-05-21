@@ -1,7 +1,7 @@
 console.log("Hello World!", window.origin);
 
 const request = () => {
-  const url = "https://api.dev-era-vr.ru";
+  const url = "https://dev-era-vr.ru/api/";
   const options = {
     method: "GET",
   };
