@@ -7,6 +7,7 @@ cert:
 		--issue \
 		--webroot /var/www/certbot \
 		-d $(DOMAIN) \
+		-d api.$(DOMAIN) \
 		--key-file /acme.sh/privkey.pem \
 		--fullchain-file /acme.sh/fullchain.pem
 
@@ -15,6 +16,7 @@ renew:
 		--renew \
 		--webroot /var/www/certbot \
 		-d $(DOMAIN) \
+		-d api.$(DOMAIN) \
 		--key-file /acme.sh/privkey.pem \
 		--fullchain-file /acme.sh/fullchain.pem
 
